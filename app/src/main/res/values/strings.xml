@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Anime</string>
+    <string name="hero_name_1">Naruto</string>
+    <string name="hero_name_2">Jotaro</string>
+    <string name="hero_name_3">Kyoka</string>
+    <string name="hero_name_4">Reki</string>
+    <string name="hero_name_5">Souma</string>
+    <string name="hero_name_6">Tatsuya</string>
+    <string name="hero_name_7">Yatora</string>
+    <string name="hero_name_8">Yiji</string>
+    <string name="hero_description_1">Likes pranking others and watering plants.</string>
+    <string name="hero_description_2">Likes reading books about planes and ships.</string>
+    <string name="hero_description_3">Loves music. Her room is full of various instruments, and she is proficient enough that she even taught a few classmates how to play.</string>
+    <string name="hero_description_4">Loves skateboarding and customizing boards.</string>
+    <string name="hero_description_5">Enjoys cooking. Souma is always driven to improve his cooking and never backs down from a challenge.</string>
+    <string name="hero_description_6">Quit sports to start live-streaming.</string>
+    <string name="hero_description_7">Loves painting. Before discovering the joy in painting, Yatora wandered aimlessly through life without rhyme or reason.</string>
+    <string name="hero_description_8">He enjoys doing karaoke, watching TV, and doing impressions.</string>
+    <string name="hobby">Hobby:</string>
+    <string name="years_old">%d years old</string>
+    <string name="hero">Hero %d</string>
+    <string name="expand_button_content_description">See more or less information about a hero.</string>
+</resources>
