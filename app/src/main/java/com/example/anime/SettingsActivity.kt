@@ -10,12 +10,13 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import com.example.anime.ui.theme.AnimeTheme
 import com.example.anime.ui.theme.md_theme_dark_background
 import kotlinx.coroutines.launch
 
-class MainActivity : ComponentActivity() {
+class SettingsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -27,7 +28,7 @@ class MainActivity : ComponentActivity() {
                     scaffoldState = scaffoldState,
                     topBar = {
                         AppBar(
-                            title = "Главная страница",
+                            title = "Настройки",
                             onNavigationIconClick = {
                                 scope.launch {
                                     scaffoldState.drawerState.open()
@@ -62,27 +63,31 @@ class MainActivity : ComponentActivity() {
                             onItemClick = {item ->
                                 when (item.id) {
                                     "home" -> {
-
+                                        println("Clicked on ${item.title}")
+                                        startActivity(Intent(this@SettingsActivity, MainActivity::class.java))
                                     }
                                     "help" -> {
-                                        startActivity(Intent(this@MainActivity, HelpActivity::class.java))
+                                        println("Clicked on ${item.title}")
+                                        startActivity(Intent(this@SettingsActivity, HelpActivity::class.java))
                                     }
                                     "settings" -> {
+                                        // Обработка нажатия на Настройки
                                         println("Clicked on ${item.title}")
-                                        startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
                                     }
                                 }
                             }
                         )
                     }
                 ) {it
-                    MainScreen()
+
 
                 }
             }
         }
 
     }
+
+
 }
 
 

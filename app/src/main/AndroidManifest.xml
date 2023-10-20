@@ -24,6 +24,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".HelpActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Anime">
+
+        </activity>
+
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Anime">
+
+        </activity>
     </application>
 
 </manifest>
