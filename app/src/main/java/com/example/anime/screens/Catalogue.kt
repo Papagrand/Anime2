@@ -24,6 +24,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -46,10 +48,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import coil.compose.rememberImagePainter
 import com.example.anime.R
 import com.example.anime.data.Hero
@@ -57,7 +62,8 @@ import com.example.anime.models.Data
 import com.example.anime.retrofit.AnimeApi
 import com.example.anime.retrofit.ApiService
 import com.example.anime.ui.theme.AnimeTheme
-
+import com.example.anime.ui.theme.md_theme_light_onPrimaryContainer
+import com.example.anime.utils.MyWorkManager
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,7 +86,7 @@ fun CatalogueSearch(
             onValueChange = {
                 onSearchTextChange(it)
             },
-            placeholder = { Text(text = "Search...") },
+            placeholder = { Text(text = "Напишите сюда название аниме...") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
@@ -91,16 +97,21 @@ fun CatalogueSearch(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CatalogueScreen(){
+fun CatalogueScreen() {
     var searchText by remember { mutableStateOf("") }
     var animeList by remember { mutableStateOf<List<Data>>(emptyList()) }
+    var isSearchActive by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
-    // Получаем данные из API
-    LaunchedEffect(searchText) {
-        val api = ApiService.animeApi
-        val response = api.getAnimeList(searchText)
-        if (response.isSuccessful) {
-            animeList = response.body()?.data ?: emptyList()
+    // Получаем данные из API при активированном поиске
+    LaunchedEffect(searchText, isSearchActive) {
+        if (isSearchActive) {
+            val api = ApiService.animeApi
+            val response = api.getAnimeList(searchText)
+            if (response.isSuccessful) {
+                animeList = response.body()?.data ?: emptyList()
+            }
+            isSearchActive = false
         }
     }
 
@@ -112,9 +123,31 @@ fun CatalogueScreen(){
             Modifier.background(Color.Transparent),
             searchText = searchText,
             onSearchTextChange = { searchText = it },
-            onSearchButtonClick = {}
+            onSearchButtonClick = { isSearchActive = true }
         )
-        Spacer(modifier = Modifier.height(16.dp)) // Пространство между поиском и элементами списка
+        Spacer(modifier = Modifier.height(5.dp)) // Пространство между поиском и элементами списка
+        Button(
+            onClick = {
+                val delaySeconds = 2
+                val inputData = androidx.work.Data.Builder().putInt("delaySeconds", delaySeconds).build()
+                val workRequest = OneTimeWorkRequest.Builder(MyWorkManager::class.java)
+                    .setInputData(inputData)
+                    .build()
+
+                WorkManager.getInstance(context).enqueue(workRequest)
+                isSearchActive = true
+            },
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = md_theme_light_onPrimaryContainer,
+                contentColor = Color.White
+
+            )
+        ) {
+            Text("Поиск")
+        }
+        Spacer(modifier = Modifier.height(5.dp))
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Fixed(2),
             content = {
@@ -123,9 +156,9 @@ fun CatalogueScreen(){
                 }
             }
         )
-
     }
 }
+
 
 
 
